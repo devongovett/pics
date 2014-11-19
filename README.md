@@ -56,6 +56,12 @@ color spaces supported by this image format. Color space conversion using the
 modules may be performed prior to data being passed to the encoder if the input color space
 is not one of the supported color spaces of this encoder.
 
+For examples of image codecs, check out the following modules:
+
+* [png-stream](https://github.com/devongovett/png-stream)
+* [jpg-stream](https://github.com/devongovett/jpg-stream)
+* [gif-stream](https://github.com/devongovett/gif-stream)
+
 ### `pics.decode(options)`
 
 Returns a decoder stream that probes the image to find an available decoder for the file.
