@@ -16,10 +16,6 @@ function ImageEncoder(type, opts) {
 
 util.inherits(ImageEncoder, PixelStream);
 
-ImageEncoder.prototype.addFrame = function(frame) {
-  this._input.addFrame(frame);
-};
-
 // returns whether the given color space includes an alpha channel
 function hasAlpha(cs) {
   return cs[cs.length - 1] === 'a';
@@ -72,7 +68,7 @@ ImageEncoder.prototype._writePixels = function(chunk, done) {
   this._input.write(chunk, done);
 };
 
-ImageEncoder.prototype._flush = function(done) {
+ImageEncoder.prototype._end = function(done) {
   this._output.once('end', done);
   this._input.end();
 };
