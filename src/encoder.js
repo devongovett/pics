@@ -4,7 +4,7 @@ var ColorTransform = require('color-transform');
 var nq = require('neuquant');
 
 function ImageEncoder(type, opts) {
-  PixelStream.call(this);
+  PixelStream.call(this, opts);
   
   var encoder = ImageEncoder.find(type, opts);
   if (!encoder)
