@@ -1,6 +1,6 @@
 {
   "name": "pics",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Ties together streaming image encoders and decoders with a nice API",
   "main": "index.js",
   "directories": {
