@@ -4,6 +4,11 @@ var util = require('util');
 function ImageDecoder() {
   Transform.call(this);
   this._decoder = null;
+  
+  // update this.format when format events are emitted
+  this.on('format', function(format) {
+    this.format = format;
+  });
 }
 
 util.inherits(ImageDecoder, Transform);
@@ -14,42 +19,23 @@ ImageDecoder.prototype._transform = function(chunk, encoding, done) {
     var decoder = ImageDecoder.probe(chunk);
     if (!decoder)
       return done(new Error('Unsupported image format'));
-    
+      
+    // proxy events and stream output to this stream
+    decoder.emit = this.emit.bind(this);
+    decoder.push = this.push.bind(this);
     this._decoder = decoder;
-    
-    var self = this
-    decoder.on('data', function(data) {
-      self.push(data);
-    });
-    
-    decoder.once('format', function(format) {
-      self.format = format;
-      self.emit('format', format);
-    });
-    
-    decoder.on('meta', function(data) {
-      self.meta = data;
-      self.emit('meta', data);
-    });
-    
-    decoder.on('frame', function(frame) {
-      self.emit('frame', frame);
-    });
-    
-    decoder.on('error', function(err) {
-      self.emit('error', err);
-    });
   }
   
-  // write the chunk to the actual decoder
-  // ignore errors here since they are handled above
-  this._decoder.write(chunk, encoding, function(err) {
-    done();
-  });
+  // call _transform on the actual decoder
+  this._decoder._transform(chunk, encoding, done);
 };
 
 ImageDecoder.prototype._flush = function(done) {
-  this._decoder.end(done);
+  // call _flush on the decoder if it is implemented
+  if (typeof this._decoder._flush === 'function')
+    this._decoder._flush(done);
+  else
+    done();
 };
 
 var decoders = [];
