@@ -13,10 +13,11 @@ Ties together streaming image encoders and decoders with a nice API. It handles 
 
 ## Example
 
-The following example registers some image codec plugins, and converts a PNG to a JPEG.
+The following example registers some image codec plugins, resizes a PNG file, and converts it to a JPEG.
 
 ```javascript
 var pics = require('pics');
+var resize = require('resizer-stream);
 
 // register some image codecs
 pics.use(require('gif-stream'));
@@ -26,6 +27,7 @@ pics.use(require('png-stream'));
 // convert a PNG to a JPEG
 fs.createReadStream('in.png')
   .pipe(pics.decode())
+  .pipe(resize({ width: 300, height: 300, fit: true }))
   .pipe(pics.encode('image/jpeg'))
   .pipe(fs.createWriteStream('out.jpg'));
 ```
