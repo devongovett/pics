@@ -17,7 +17,7 @@ The following example registers some image codec plugins, resizes a PNG file, an
 
 ```javascript
 var pics = require('pics');
-var resize = require('resizer-stream);
+var resize = require('resizer-stream');
 
 // register some image codecs
 pics.use(require('gif-stream'));
